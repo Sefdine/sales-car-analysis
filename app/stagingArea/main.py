@@ -3,9 +3,16 @@
 # Import necessary libraries and load data
 import pandas as pd
 import uuid
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Read us cars data from csv
 us_cars_df = pd.read_csv("../data/us_cars.csv")
+logging.info('CSV Data Loaded')
+logging.info('Start pre-traitement in csv data')
 
 # Drop unecessary columns
 columns_to_drop = [' Genmodel_ID', 'Wheelbase', 'Annual_Tax', 'Wheelbase', 'Top_speed', 'Engine_power', 'Adv_ID']
@@ -28,6 +35,8 @@ us_cars_df['ID'] = us_cars_df['Maker'].apply(lambda x: str(uuid.uuid4()))
 
 # Read the data from the json source
 marketcheck_df = pd.read_json('../data/marketcheck.json')
+logging.info('JSON Data Loaded')
+logging.info('Start pre-traitement in json data')
 
 # Rename columns
 marketcheck_mapper = {
@@ -75,7 +84,11 @@ marketcheck_df['Average_mpg'] = (marketcheck_df['Highway_mpg'] + marketcheck_df[
 # Drop highway and city mpg
 marketcheck_df.drop(columns=['Highway_mpg', 'City_mpg'], inplace=True)
 
+logging.info('Pre-traitement complete, begin merging sources')
 # Concat the two dataframes and create a final dataframe
 final_df = pd.concat([us_cars_df, marketcheck_df], ignore_index=True)
 
+# Load concatenated data in a staging area
+logging.info('Load merged data into a staging area')
 final_df.to_csv('../data/final_df.csv', index=False)
+logging.info('Data loaded successfully !')
