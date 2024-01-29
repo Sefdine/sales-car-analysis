@@ -30,6 +30,8 @@ mapper = {
 us_cars_df.rename(columns=mapper, inplace=True)
 # Add column stat "used"
 us_cars_df['Stat'] = "used"
+# Add column country
+us_cars_df['country'] = 'United Kingdom'
 
 # Generate id for us_cars_df
 us_cars_df['ID'] = us_cars_df['Maker'].apply(lambda x: str(uuid.uuid4()))
@@ -70,6 +72,9 @@ marketcheck_df['City_mpg'] = marketcheck_df['Build'].apply(lambda x: x['city_mpg
 
 # Drop Build column
 marketcheck_df.drop(columns=['Build'], inplace=True)
+
+# Add country column
+marketcheck_df['country'] = 'United States'
 
 # Transform datetime type
 marketcheck_df['Adv_date'] = pd.to_datetime(marketcheck_df['Adv_date'])
