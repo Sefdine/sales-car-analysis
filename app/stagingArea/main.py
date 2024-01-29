@@ -4,13 +4,20 @@
 import pandas as pd
 import uuid
 import logging
+import os
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# Get the current working directory 
+current_directory = os.getcwd()
+
+# CSV path
+csv_file_path = os.path.abspath(os.path.join(current_directory, "../data/us_cars.csv"))
+
 # Read us cars data from csv
-us_cars_df = pd.read_csv("../data/us_cars.csv")
+us_cars_df = pd.read_csv(csv_file_path)
 logging.info('CSV Data Loaded')
 logging.info('Start pre-traitement in csv data')
 
