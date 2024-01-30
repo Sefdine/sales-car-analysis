@@ -63,6 +63,7 @@ df['Fuel_category'] = df['Fuel_type'].replace({
 # Fill null values in Color column
 df['Color'].fillna(df.groupby(['Maker', 'Model', 'Reg_year', 'Gearbox', 'Fuel_type', 'Fuel_category'])['Color'].transform('first'), inplace=True)
 df['Color'].fillna(df.groupby(['Maker', 'Model', 'Reg_year', 'Gearbox'])['Color'].transform('first'), inplace=True)
+df['Color'].fillna(df.groupby('Maker')['Color'].transform('first'), inplace=True)
 
 # Handle missing values in Height, Width and Length
 for column in ['Height', 'Width', 'Length']:
