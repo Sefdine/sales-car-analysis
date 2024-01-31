@@ -32,7 +32,7 @@ else:
 
         err_count = 0
 
-        for i in range(500):
+        for i in range(cars_dim_df.shape[0]):
             Reg_year = int(cars_dim_df['Reg_year'][i])
             Engine_size = float(cars_dim_df['Engine_size'][i])
             Height = int(cars_dim_df['Height'][i])
