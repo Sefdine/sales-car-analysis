@@ -11,7 +11,7 @@ def connection():
     # Replace these values with your SQL Server credentials and connection details
     username = 'sa'
     password = 'YourPassword123'
-    database = 'cars_sales_warehouse'
+    database = 'car_sales_warehouse'
     server = 'localhost'
 
     # Construct the connection string
