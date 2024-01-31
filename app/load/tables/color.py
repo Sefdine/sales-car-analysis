@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker
 import logging
 import sys
 sys.path.append("../")
-from create_tables import Country_Dimension, engine
+from create_tables import Color_Dimension, engine
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -22,18 +22,18 @@ else:
         Session = sessionmaker(bind=engine)
         session = Session()
 
-        # Insert into country
-        for row in df['country'].unique():
+        # Insert into color
+        for row in df['Color'].unique():
             # Check the line
-            existing_country = session.query(Country_Dimension).filter_by(Country=row).first()
-            if not existing_country:
-                new_country = Country_Dimension(Country=row)
-                session.add(new_country)
+            existing_color = session.query(Color_Dimension).filter_by(Color=row).first()
+            if not existing_color:
+                new_color = Color_Dimension(Color=row)
+                session.add(new_color)
         # Commit the changes
         session.commit()
-        logging.info("Success: country loaded successfully !")
+        logging.info("Success: color loaded successfully !")
     except Exception as e:
-        logging.error(f"Error: Failed to load country into data warehouse. {e}")
+        logging.error(f"Error: Failed to load color into data warehouse. {e}")
 
     # Dispose engine
     engine.dispose()

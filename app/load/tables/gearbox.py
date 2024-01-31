@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker
 import logging
 import sys
 sys.path.append("../")
-from create_tables import Country_Dimension, engine
+from create_tables import Gearbox_Dimension, engine
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -22,18 +22,17 @@ else:
         Session = sessionmaker(bind=engine)
         session = Session()
 
-        # Insert into country
-        for row in df['country'].unique():
+        # Insert into Geabox
+        for row in df['Gearbox'].unique():
             # Check the line
-            existing_country = session.query(Country_Dimension).filter_by(Country=row).first()
-            if not existing_country:
-                new_country = Country_Dimension(Country=row)
-                session.add(new_country)
-        # Commit the changes
+            existing_gearbox = session.query(Gearbox_Dimension).filter_by(Gearbox=row).first()
+            if not existing_gearbox:
+                new_gearbox = Gearbox_Dimension(Gearbox=row)
+                session.add(new_gearbox)
         session.commit()
-        logging.info("Success: country loaded successfully !")
+        logging.info("Success: gearbox loaded successfully !")
     except Exception as e:
-        logging.error(f"Error: Failed to load country into data warehouse. {e}")
+        logging.error(f"Error: Failed to load gearbox into data warehouse. {e}")
 
     # Dispose engine
     engine.dispose()

@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker
 import logging
 import sys
 sys.path.append("../")
-from create_tables import Country_Dimension, engine
+from create_tables import CarStatus_Dimension, engine
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -22,18 +22,17 @@ else:
         Session = sessionmaker(bind=engine)
         session = Session()
 
-        # Insert into country
-        for row in df['country'].unique():
+        # Insert into CarStatus
+        for row in df['Stat'].unique():
             # Check the line
-            existing_country = session.query(Country_Dimension).filter_by(Country=row).first()
-            if not existing_country:
-                new_country = Country_Dimension(Country=row)
-                session.add(new_country)
-        # Commit the changes
+            existing_stat = session.query(CarStatus_Dimension).filter_by(CarStatus=row).first()
+            if not existing_stat:
+                new_stat = CarStatus_Dimension(CarStatus=row)
+                session.add(new_stat)
         session.commit()
-        logging.info("Success: country loaded successfully !")
+        logging.info("Success: carStatus loaded successfully !")
     except Exception as e:
-        logging.error(f"Error: Failed to load country into data warehouse. {e}")
+        logging.error(f"Error: Failed to load carStatus into data warehouse. {e}")
 
     # Dispose engine
     engine.dispose()
