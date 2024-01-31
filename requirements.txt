@@ -3,3 +3,4 @@ python-dotenv
 SQLAlchemy
 hdfs
 pyodbc
+apache-airflow
