@@ -139,5 +139,3 @@ else:
         logging.info("Success: All tables created succefully !")
     except:
         logging.error("Error: Failed to create tables")
-
-    engine.dispose()
