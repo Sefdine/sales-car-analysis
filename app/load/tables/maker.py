@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker
 import logging
 import sys
 sys.path.append("../")
-from create_tables import Country_Dimension, engine
+from create_tables import Maker_Dimension, engine
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -22,18 +22,18 @@ else:
         Session = sessionmaker(bind=engine)
         session = Session()
 
-        # Insert into country
-        for row in df['country'].unique():
+        # Insert into maker
+        for row in df['Maker'].unique():
             # Check the line
-            existing_country = session.query(Country_Dimension).filter_by(Country=row).first()
-            if not existing_country:
-                new_country = Country_Dimension(Country=row)
-                session.add(new_country)
+            existing_maker = session.query(Maker_Dimension).filter_by(Maker=row).first()
+            if not existing_maker:
+                new_maker = Maker_Dimension(Maker=row)
+                session.add(new_maker)
         # Commit the changes
         session.commit()
-        logging.info("Success: country loaded successfully !")
+        logging.info("Success: maker loaded successfully !")
     except Exception as e:
-        logging.error(f"Error: Failed to load country into data warehouse. {e}")
+        logging.error(f"Error: Failed to load maker into data warehouse. {e}")
 
     # Dispose engine
     engine.dispose()
