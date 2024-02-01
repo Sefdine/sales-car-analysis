@@ -26,23 +26,32 @@ else:
         # Insert into Date
         date_df = df[['Adv_year', 'Adv_month', 'Adv_date']].drop_duplicates().reset_index(drop=True)
 
-        for i in range(date_df.shape[0]):
-            # Convert Timestamp to datetime.date
-            adv_date = datetime.strptime(date_df['Adv_date'][i], "%Y-%m-%d").date()
-            # Convert Adv_year and Adv_month to integers
-            adv_year = int(date_df['Adv_year'][i])
-            adv_month = int(date_df['Adv_month'][i])
+        for year in range(df['Adv_year'].min(), df['Adv_year'].max() + 1):
+            for month in range(1, 13):
+                for day in range(1, 32):
+                    try:
+                        # Create date object
+                        adv_date = datetime(year, month, day).date()
 
-            # Check existing
-            existing_date = (
-                session.query(Date_Dimension)
-                .filter_by(Adv_year=adv_year, Adv_month=adv_month, Adv_date=adv_date)
-                .first()
-            )
-            if not existing_date:
-                new_date = Date_Dimension(Adv_year=adv_year, Adv_month=adv_month, Adv_date=adv_date)
-                session.add(new_date)
-        session.commit()
+                        # Check existing
+                        existing_date = (
+                            session.query(Date_Dimension)
+                            .filter_by(Adv_year=year, Adv_month=month, Adv_date=adv_date)
+                            .first()
+                        )
+
+                        if not existing_date:
+                            # Insert into Date_Dimension
+                            new_date = Date_Dimension(Adv_year=year, Adv_month=month, Adv_date=adv_date)
+                            session.add(new_date)
+                            logging.info(f"{year}-{month}-{day} inserted successfully !")
+                            session.commit()
+
+                    except ValueError:
+                        # Handle cases where the day exceeds the number of days in the month
+                        logging.info(f"{year}-{month}-{day} already exists")
+                        session.rollback()
+                        pass
         logging.info("Success: date loaded successfully !")
     except Exception as e:
         logging.error(f"Error: Failed to load date into data warehouse. {e}")
