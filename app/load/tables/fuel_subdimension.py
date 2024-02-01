@@ -30,9 +30,11 @@ else:
             FuelCategory = fuel_subdimension_df['Fuel_category'][i]
 
             # Retrieve the fuel categiry id
-            FuelCategory_ID = engine.connect().execute(text(f"SELECT FuelCategory_ID FROM Fuel_Dimension WHERE FuelCategory = '{FuelCategory}';")).fetchone()[0]
+            conn = engine.connect()
+            FuelCategory_ID = conn.execute(text(f"SELECT FuelCategory_ID FROM Fuel_Dimension WHERE FuelCategory = '{FuelCategory}';")).fetchone()[0]
             # Check if exists
             existing_fuel_type = session.query(Fuel_SubDimension).filter_by(Fuel_type=Fuel_type).first()
+            conn.close()
             if not existing_fuel_type:
                 new_fuel_type = Fuel_SubDimension(Fuel_type=Fuel_type, FuelCategory_ID=FuelCategory_ID)
                 session.add(new_fuel_type)
