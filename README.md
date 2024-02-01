@@ -1,6 +1,6 @@
 # Car Sales Data Analysis Pipeline
-![Project architecture](images/bi_workflow.png)
-![Planification Jira](images/plan.png)
+![Project architecture](Images/bi_workflow.png)
+![Planification Jira](Images/plan.png)
 
 ## Project Overview
 
