@@ -4,6 +4,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.sql import text
 import logging
 import sys
+import time
 from datetime import datetime
 sys.path.append("../")
 from create_tables import Cars_Dimension, engine
@@ -32,7 +33,7 @@ else:
 
         err_count = 0
 
-        for i in range(cars_dim_df.shape[0]):
+        for i in range(20628, cars_dim_df.shape[0]):
             Reg_year = int(cars_dim_df['Reg_year'][i])
             Engine_size = float(cars_dim_df['Engine_size'][i])
             Height = int(cars_dim_df['Height'][i])
@@ -51,12 +52,13 @@ else:
 
             try:
                 # Retrieve the foreign keys
-                Maker_ID = engine.connect().execute(text(f"SELECT Maker_ID FROM Maker_Dimension WHERE Maker = '{Maker}';")).fetchone()[0]
-                Model_ID = engine.connect().execute(text(f"SELECT Model_ID FROM Model_Dimension WHERE Model = '{Model}' AND Bodytype = '{Bodytype}';")).fetchone()[0]
-                Color_ID = engine.connect().execute(text(f"SELECT Color_ID FROM Color_Dimension WHERE Color = '{Color}';")).fetchone()[0]
-                Gearbox_ID = engine.connect().execute(text(f"SELECT Gearbox_ID FROM Gearbox_Dimension WHERE Gearbox = '{Gearbox}';")).fetchone()[0]
-                FuelCategory_ID = engine.connect().execute(text(f"SELECT FuelCategory_ID FROM Fuel_Dimension WHERE FuelCategory = '{Fuel_category}';")).fetchone()[0]
-                CarStatus_ID = engine.connect().execute(text(f"SELECT CarStatus_ID FROM CarStatus_Dimension WHERE CarStatus = '{CarStatus}';")).fetchone()[0]
+                conn = engine.connect()
+                Maker_ID = conn.execute(text(f"SELECT Maker_ID FROM Maker_Dimension WHERE Maker = '{Maker}';")).fetchone()[0]
+                Model_ID = conn.execute(text(f"SELECT Model_ID FROM Model_Dimension WHERE Model = '{Model}' AND Bodytype = '{Bodytype}';")).fetchone()[0]
+                Color_ID = conn.execute(text(f"SELECT Color_ID FROM Color_Dimension WHERE Color = '{Color}';")).fetchone()[0]
+                Gearbox_ID = conn.execute(text(f"SELECT Gearbox_ID FROM Gearbox_Dimension WHERE Gearbox = '{Gearbox}';")).fetchone()[0]
+                FuelCategory_ID = conn.execute(text(f"SELECT FuelCategory_ID FROM Fuel_Dimension WHERE FuelCategory = '{Fuel_category}';")).fetchone()[0]
+                CarStatus_ID = conn.execute(text(f"SELECT CarStatus_ID FROM CarStatus_Dimension WHERE CarStatus = '{CarStatus}';")).fetchone()[0]
             
                 # Check if exist
                 existing_cars_dim = (
@@ -77,6 +79,7 @@ else:
                         CarStatus_ID=CarStatus_ID
                     ).first()
                 )
+                conn.close()
                 if not existing_cars_dim:
                     new_car_dim = Cars_Dimension(
                         Reg_year=Reg_year,
@@ -102,9 +105,10 @@ else:
             except Exception as e:
                 logging.error(f"Error N° {i+1} {str(e)}")
                 session.rollback()
-                if err_count > 5:
+                if err_count >= 5:
                     break
                 err_count += 1
+                time.sleep(5)
 
         logging.info("Success: cars_dimension loaded successfully !")
     except Exception as e:
