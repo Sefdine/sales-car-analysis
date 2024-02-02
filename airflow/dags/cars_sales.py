@@ -7,7 +7,7 @@ default_args = {
     'owner': 'like',
     'depends_on_past': False,
     'start_date': datetime(2024, 1, 29),
-    'retries': 1,
+    'retries': 0,
     'retry_delay': timedelta(seconds=1),
 }
 
@@ -24,7 +24,7 @@ dag = DAG(
 staging = BashOperator(
 	task_id = 'staging',
 	bash_command='''
-		cd ~/Documents/Projects/Youcode/FilRouge/sales-car-analysis/app/stagingArea && \
+		cd /home/like/app/stagingArea && \
 		python3 main.py
 	''',
     dag=dag,
@@ -34,7 +34,7 @@ staging = BashOperator(
 transformation = BashOperator(
 	task_id = 'transformation',
 	bash_command='''
-		cd ~/Documents/Projects/Youcode/FilRouge/sales-car-analysis/app/transformation && \
+		cd /home/like/app/transformation && \
 		python3 main.py
 	''',
     dag=dag,
@@ -44,7 +44,7 @@ transformation = BashOperator(
 create_tables = BashOperator(
 	task_id = 'create_tables',
 	bash_command='''
-		cd ~/Documents/Projects/Youcode/FilRouge/sales-car-analysis/app/load && \
+		cd /home/like/app/load && \
 		python3 create_tables.py
 	''',
     dag=dag,
@@ -54,7 +54,7 @@ create_tables = BashOperator(
 country = BashOperator(
 	task_id = 'country',
 	bash_command='''
-		cd ~/Documents/Projects/Youcode/FilRouge/sales-car-analysis/app/load/tables && \
+		cd /home/like/app/load/tables && \
 		python3 country.py
 	''',
     dag=dag,
@@ -64,7 +64,7 @@ country = BashOperator(
 maker = BashOperator(
 	task_id = 'maker',
 	bash_command='''
-		cd ~/Documents/Projects/Youcode/FilRouge/sales-car-analysis/app/load/tables && \
+		cd /home/like/app/load/tables && \
 		python3 maker.py
 	''',
     dag=dag,
@@ -74,7 +74,7 @@ maker = BashOperator(
 color = BashOperator(
 	task_id = 'color',
 	bash_command='''
-		cd ~/Documents/Projects/Youcode/FilRouge/sales-car-analysis/app/load/tables && \
+		cd /home/like/app/load/tables && \
 		python3 color.py
 	''',
     dag=dag,
@@ -84,7 +84,7 @@ color = BashOperator(
 gearbox = BashOperator(
 	task_id = 'gearbox',
 	bash_command='''
-		cd ~/Documents/Projects/Youcode/FilRouge/sales-car-analysis/app/load/tables && \
+		cd /home/like/app/load/tables && \
 		python3 gearbox.py
 	''',
     dag=dag,
@@ -94,7 +94,7 @@ gearbox = BashOperator(
 car_status = BashOperator(
 	task_id = 'car_status',
 	bash_command='''
-		cd ~/Documents/Projects/Youcode/FilRouge/sales-car-analysis/app/load/tables && \
+		cd /home/like/app/load/tables && \
 		python3 car_status.py
 	''',
     dag=dag,
@@ -104,7 +104,7 @@ car_status = BashOperator(
 model = BashOperator(
 	task_id = 'model',
 	bash_command='''
-		cd ~/Documents/Projects/Youcode/FilRouge/sales-car-analysis/app/load/tables && \
+		cd /home/like/app/load/tables && \
 		python3 model.py
 	''',
     dag=dag,
@@ -114,7 +114,7 @@ model = BashOperator(
 date = BashOperator(
 	task_id = 'date',
 	bash_command='''
-		cd ~/Documents/Projects/Youcode/FilRouge/sales-car-analysis/app/load/tables && \
+		cd /home/like/app/load/tables && \
 		python3 date.py
 	''',
     dag=dag,
@@ -124,7 +124,7 @@ date = BashOperator(
 fuel_dimension = BashOperator(
 	task_id = 'fuel_dimension',
 	bash_command='''
-		cd ~/Documents/Projects/Youcode/FilRouge/sales-car-analysis/app/load/tables && \
+		cd /home/like/app/load/tables && \
 		python3 fuel_dimension.py
 	''',
     dag=dag,
@@ -134,7 +134,7 @@ fuel_dimension = BashOperator(
 fuel_subdimension = BashOperator(
 	task_id = 'fuel_subdimension',
 	bash_command='''
-		cd ~/Documents/Projects/Youcode/FilRouge/sales-car-analysis/app/load/tables && \
+		cd /home/like/app/load/tables && \
 		python3 fuel_subdimension.py
 	''',
     dag=dag,
@@ -144,7 +144,7 @@ fuel_subdimension = BashOperator(
 cars_dimension = BashOperator(
 	task_id = 'cars_dimension',
 	bash_command='''
-		cd ~/Documents/Projects/Youcode/FilRouge/sales-car-analysis/app/load/tables && \
+		cd /home/like/app/load/tables && \
 		python3 cars_dimension.py
 	''',
     dag=dag,
@@ -154,7 +154,7 @@ cars_dimension = BashOperator(
 fact = BashOperator(
 	task_id = 'fact',
 	bash_command='''
-		cd ~/Documents/Projects/Youcode/FilRouge/sales-car-analysis/app/load/tables && \
+		cd /home/like/app/load/tables && \
 		python3 fact.py
 	''',
     dag=dag,

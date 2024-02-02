@@ -26,12 +26,12 @@ else:
 
         # Insert into fact
         err_count = 0
-        for i in range(df.shape[0]):
+        for i in range(232120, df.shape[0]):
             Sale_ID = df['ID'][i]
             Price = float(df['Price'][i])
             Miles = int(df['Miles'][i])
             Average_mpg = df['Average_mpg'][i]
-            Adv_date = datetime.strptime(df['Adv_date'][0], "%Y-%m-%d").date()
+            Adv_date = datetime.strptime(df['Adv_date'][i], "%Y-%m-%d").date()
             Country = df['country'][i]
             Reg_year = int(df['Reg_year'][i])
             Engine_size = float(df['Engine_size'][i])
@@ -50,15 +50,16 @@ else:
 
 
             try:
+                conn = engine.connect()
                 # Retrieve the foreign keys
-                Maker_ID = engine.connect().execute(text(f"SELECT Maker_ID FROM Maker_Dimension WHERE Maker = '{Maker}';")).fetchone()[0]
-                Model_ID = engine.connect().execute(text(f"SELECT Model_ID FROM Model_Dimension WHERE Model = '{Model}' AND Bodytype = '{Bodytype}';")).fetchone()[0]
-                Color_ID = engine.connect().execute(text(f"SELECT Color_ID FROM Color_Dimension WHERE Color = '{Color}';")).fetchone()[0]
-                Gearbox_ID = engine.connect().execute(text(f"SELECT Gearbox_ID FROM Gearbox_Dimension WHERE Gearbox = '{Gearbox}';")).fetchone()[0]
-                FuelCategory_ID = engine.connect().execute(text(f"SELECT FuelCategory_ID FROM Fuel_Dimension WHERE FuelCategory = '{Fuel_category}';")).fetchone()[0]
-                CarStatus_ID = engine.connect().execute(text(f"SELECT CarStatus_ID FROM CarStatus_Dimension WHERE CarStatus = '{CarStatus}';")).fetchone()[0]
+                Maker_ID = conn.execute(text(f"SELECT Maker_ID FROM Maker_Dimension WHERE Maker = '{Maker}';")).fetchone()[0]
+                Model_ID = conn.execute(text(f"SELECT Model_ID FROM Model_Dimension WHERE Model = '{Model}' AND Bodytype = '{Bodytype}';")).fetchone()[0]
+                Color_ID = conn.execute(text(f"SELECT Color_ID FROM Color_Dimension WHERE Color = '{Color}';")).fetchone()[0]
+                Gearbox_ID = conn.execute(text(f"SELECT Gearbox_ID FROM Gearbox_Dimension WHERE Gearbox = '{Gearbox}';")).fetchone()[0]
+                FuelCategory_ID = conn.execute(text(f"SELECT FuelCategory_ID FROM Fuel_Dimension WHERE FuelCategory = '{Fuel_category}';")).fetchone()[0]
+                CarStatus_ID = conn.execute(text(f"SELECT CarStatus_ID FROM CarStatus_Dimension WHERE CarStatus = '{CarStatus}';")).fetchone()[0]
 
-                Car_ID = engine.connect().execute(text(f'''
+                Car_ID = conn.execute(text(f'''
                                 SELECT Car_ID FROM Cars_Dimension 
                                 WHERE Reg_year = '{Reg_year}'
                                 AND Engine_size = '{Engine_size}'
@@ -74,8 +75,8 @@ else:
                                 AND FuelCategory_ID = '{FuelCategory_ID}'
                                 AND CarStatus_ID = '{CarStatus_ID}';
                         ''')).fetchone()[0]
-                Country_ID = engine.connect().execute(text(f"SELECT Country_ID FROM Country_Dimension WHERE Country = '{Country}';")).fetchone()[0]
-                Adv_ID = engine.connect().execute(text(f"SELECT Adv_ID FROM Date_Dimension WHERE Adv_date = '{Adv_date}';")).fetchone()[0]
+                Country_ID = conn.execute(text(f"SELECT Country_ID FROM Country_Dimension WHERE Country = '{Country}';")).fetchone()[0]
+                Adv_ID = conn.execute(text(f"SELECT Adv_ID FROM Date_Dimension WHERE Adv_date = '{Adv_date}';")).fetchone()[0]
 
                 # Check if exists
                 existing_fact = (
@@ -89,6 +90,7 @@ else:
                         Country_ID=Country_ID
                     ).first()
                 )
+                conn.close()
                 if not existing_fact:
                     new_fact = FactSales(
                         Sale_ID=Sale_ID,

@@ -78,6 +78,7 @@ df['Average_mpg'] = df['Average_mpg'].astype('str').str.rstrip('mpg').str.strip(
 df['Average_mpg'].fillna(df.groupby(['Maker', 'Model', 'Reg_year'])['Average_mpg'].transform('mean'), inplace=True)
 df['Average_mpg'].fillna(df.groupby(['Maker', 'Reg_year'])['Average_mpg'].transform('mean'), inplace=True)
 df['Average_mpg'].fillna(df.groupby(['Maker'])['Average_mpg'].transform('mean'), inplace=True)
+df['Average_mpg'].fillna(df['Average_mpg'].mean(), inplace=True)
 
 # Handle Seatings missing values
 df['Seatings'].fillna(df.groupby(['Maker', 'Model', 'Reg_year', 'Bodytype'])['Seatings'].transform('first'), inplace=True)
@@ -96,6 +97,9 @@ df['Doors'].fillna(df.groupby(['Model', 'Bodytype', 'Reg_year'])['Doors'].transf
 df['Doors'].fillna(df.groupby(['Bodytype', 'Reg_year'])['Doors'].transform('first'), inplace=True)
 df['Doors'].fillna(df.groupby(['Maker', 'Model'])['Doors'].transform('first'), inplace=True)
 df['Doors'].fillna(df.groupby(['Maker'])['Doors'].transform('first'), inplace=True)
+
+# Handle Model ' char
+df.loc[df['Model'].str.contains('\''), 'Model'] = df.loc[df['Model'].str.contains('\''), 'Model'].str.replace('\'', '')
 
 logging.info('Transformation done !')
 logging.info('Load transformed data into csv')
