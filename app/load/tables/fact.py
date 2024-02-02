@@ -26,7 +26,7 @@ else:
 
         # Insert into fact
         err_count = 0
-        for i in range(232120, df.shape[0]):
+        for i in range(3):
             Sale_ID = df['ID'][i]
             Price = float(df['Price'][i])
             Miles = int(df['Miles'][i])

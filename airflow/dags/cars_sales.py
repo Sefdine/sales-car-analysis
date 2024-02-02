@@ -160,6 +160,36 @@ fact = BashOperator(
     dag=dag,
 )
 
+# Task: Unit test accuracy
+accuracy = BashOperator(
+	task_id = 'accuracy',
+	bash_command='''
+		cd /home/like/app/load/unitTests && \
+		python3 accuracy.py
+	''',
+    dag=dag,
+)
+
+# Task: Unit test completeness
+completeness = BashOperator(
+	task_id = 'completeness',
+	bash_command='''
+		cd /home/like/app/load/unitTests && \
+		python3 completeness.py
+	''',
+    dag=dag,
+)
+
+# Task: Unit test consistency
+consistency = BashOperator(
+	task_id = 'consistency',
+	bash_command='''
+		cd /home/like/app/load/unitTests && \
+		python3 consistency.py
+	''',
+    dag=dag,
+)
+
 staging >> transformation >> create_tables
 
 create_tables >> [
@@ -178,3 +208,5 @@ fuel_dimension >> fuel_subdimension
 [maker, model, color, gearbox, fuel_dimension, car_status] >> cars_dimension
 
 cars_dimension >> fact
+
+fact >> [completeness, consistency, accuracy]

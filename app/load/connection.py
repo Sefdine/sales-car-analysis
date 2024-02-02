@@ -1,6 +1,7 @@
 # Import necessary packages
 from sqlalchemy import create_engine
 import logging
+from sqlalchemy.sql import text
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -11,17 +12,18 @@ def connection():
     # Replace these values with your SQL Server credentials and connection details
     username = 'sa'
     password = 'YourPassword123'
-    database = 'car_sales_warehouse'
-    server = 'localhost'
+    database = 'cars_sales_warehouse'
+    # server = 'sql_server'
+    server = 'LIKE-YOUCODE-DA\SQLEXPRESS'
 
     # Construct the connection string
-    connection_string = f"mssql+pyodbc://{username}:{password}@{server}/{database}?driver=ODBC+Driver+18+for+SQL+Server&TrustServerCertificate=yes"
+    connection_string = f"mssql+pyodbc://{username}:{password}@{server}/{database}?driver=ODBC+Driver+17+for+SQL+Server"
 
     try:
         # Create the SQLAlchemy engine
         engine = create_engine(connection_string, echo=False)
         logging.info('Success: Connected to the data warehouse !')
         return engine
-    except:
-        logging.info('Error: Failed to connect to the data warehouse.')
+    except Exception as e:
+        logging.info(f"Error: Failed to connect to the data warehouse {str(e)}.")
         return None
